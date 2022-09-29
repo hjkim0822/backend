@@ -15,7 +15,6 @@ router.post('/register', async (req, res) => {
     try {
         const user = await checkUsername.clone().exec();
         if (user.length > 0) {
-
             return res.json({ message: "ID Already Exists" });
         }
     } catch (err) {
@@ -48,7 +47,5 @@ router.get('/logout', async (req, res) => {
 
     const user = await checkUsername.clone().exec();
 })
-
-router
 
 export default router;
