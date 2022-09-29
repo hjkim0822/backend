@@ -3,6 +3,7 @@ import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
+import authRoute from './routes/auth.js';
 
 // connection string for mongodb connection
 const app = express();
@@ -13,6 +14,8 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+app.use('/auth', authRoute);
 
 const uri = 'mongodb+srv://admin:123456789a@pjw-chat.vxl7n0l.mongodb.net/?retryWrites=true&w=majority'
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })

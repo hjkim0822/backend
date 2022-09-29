@@ -16,6 +16,16 @@ const userSchema = new Schema({
         type: Boolean,
         required: true,
         default: false,
+    },
+    friends: {
+        type: Array,
+        required: true,
+        default: [],
+    },
+    rooms: {
+        type: Array,
+        required: true,
+        default: [],
     }
 }, { timestamps: true })
 
