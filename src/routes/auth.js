@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
     } catch (err) {
         return res.status(402).json({ message: err })
     }
-    
+
     try {
         const res = await createUser.clone().exec();
         return res.json(res);
@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    const checkUsername = User.find({ username, password });
+    const checkUsername = User.findOneAndUpdate({ username, password }, { status: true });
 
     const user = await checkUsername.clone().exec();
     if (user) {
@@ -40,6 +40,13 @@ router.post('/login', async (req, res) => {
     } else {
         res.status(403).json({ message: "invalid username and password"})
     }
+})
+
+router.get('/logout', async (req, res) => {
+    const { username } = req.body;
+    const checkUsername = User.findOneAndUpdate({ username }, { status: false });
+
+    const user = await checkUsername.clone().exec();
 })
 
 router
