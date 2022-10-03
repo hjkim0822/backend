@@ -6,27 +6,32 @@ const router = Router();
 
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
+    if (!username || !password) {
+        return res.json({
+            status: "fail",
+            message: "Register requires both username and password",
+        });
+    }
     const checkUsername = User.find({ username });
-    const createUser = User.create({
-        username,
-        password,
-    });
 
     try {
         const user = await checkUsername.clone().exec();
         if (user.length > 0) {
-            return res.json({ message: "ID Already Exists" });
+            return res.status(403).json({ message: "ID Already Exists" });
         }
     } catch (err) {
         return res.status(402).json({ message: err })
     }
 
-    try {
-        const res = await createUser.clone().exec();
-        return res.json(res);
-    } catch (err) {
-        res.status(402).json({ message: err })
-    }
+    User.create({
+        username,
+        password,
+    }).then(result => {
+        res.json(result)
+    }).catch( err => {
+        return res.status(402).json({ message: err })
+    })
+    
 })
 
 router.post('/login', async (req, res) => {
@@ -35,17 +40,15 @@ router.post('/login', async (req, res) => {
 
     const user = await checkUsername.clone().exec();
     if (user) {
-        res.json(user[0]);
+        return res.json(user);
     } else {
         res.status(403).json({ message: "invalid username and password"})
     }
 })
 
-router.get('/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
     const { username } = req.body;
-    const checkUsername = User.findOneAndUpdate({ username }, { status: false });
-
-    const user = await checkUsername.clone().exec();
+    User.findOneAndUpdate({ username }, { status: false }).clone().exec();
 })
 
 export default router;

@@ -9,7 +9,7 @@ import authRoute from './routes/auth.js';
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const port = 3000;
+const port = 3600;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -17,7 +17,9 @@ app.use(cors());
 
 app.use('/auth', authRoute);
 
+const localDB = 'mongodb://localhost:27017/chatvia'
 const uri = 'mongodb+srv://admin:123456789a@pjw-chat.vxl7n0l.mongodb.net/?retryWrites=true&w=majority'
+
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => { 
         server.listen(port, () => {
