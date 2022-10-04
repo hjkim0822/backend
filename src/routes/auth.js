@@ -34,11 +34,12 @@ router.post('/register', async (req, res) => {
     
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => { 
     const { username, password } = req.body;
     const checkUsername = User.findOneAndUpdate({ username, password }, { status: true });
 
     const user = await checkUsername.clone().exec();
+    console.log(user);
     if (user) {
         return res.json(user);
     } else {
