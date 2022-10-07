@@ -18,7 +18,7 @@ app.use(cors());
 app.use('/auth', authRoute);
 
 const localDB = 'mongodb://localhost:27017/chatvia'
-const uri = 'mongodb+srv://admin:123456789a@pjw-chat.vxl7n0l.mongodb.net/?retryWrites=true&w=majority'
+const uri = 'mongodb+srv://admin:123456789a@pjw-chat.vxl7n0l.mongodb.net/chat-app?retryWrites=true&w=majority'
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => { 
@@ -28,6 +28,16 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     })
     .catch(err => console.log(err));
 
+io.on('connection', socket => {
+    socket.on('message', ({ name, message }) => {
+        io.emit('message', { name, message })
+    })
+})
+process.on('SIGINT', () => {
+    mongoose.disconnect().then(() => {
+        process.exit();
+    });
+});
 // const users = client.db("chat-app").collection("users");
 // const rooms = client.db("chat-app").collection("rooms");
 
