@@ -40,5 +40,3 @@ process.on('SIGINT', () => {
 });
 // const users = client.db("chat-app").collection("users");
 // const rooms = client.db("chat-app").collection("rooms");
-
-
